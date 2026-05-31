@@ -1,0 +1,6 @@
+# ChromeDriver local
+chromedriver.exe
+
+# Python
+__pycache__/
+*.pyc
