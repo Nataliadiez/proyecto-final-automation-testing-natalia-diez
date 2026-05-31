@@ -8,13 +8,9 @@ Criterios mínimos:
 Login automatizado con espera explícita y validación de /inventory.html y “Products/Swag Labs”. 
 """
 
-from utils.saucedemo_funciones import (
-    setup_driver,
-    login_saucedemo,
-    validar_login_exitoso,
-    USUARIO_VALIDO,
-    PASSWORD_VALIDO
-)
+from utils.driver import setup_driver
+from utils.login import login_saucedemo, validar_login_exitoso
+from utils.config import USUARIO_VALIDO, PASSWORD_VALIDO
 
 
 def test_login_exitoso():

@@ -13,16 +13,14 @@ Valida presencia de productos.
 Lista nombre/precio del primero.
 """
 
-from utils.saucedemo_funciones import (
-    setup_driver,
-    login_saucedemo,
-    validar_titulo_inventario,
+from utils.driver import setup_driver
+from utils.login import login_saucedemo, validar_titulo_inventario
+from utils.catalogo import (
     validar_presencia_productos,
     validar_elementos_catalogo,
-    obtener_nombre_precio_primer_producto,
-    USUARIO_VALIDO,
-    PASSWORD_VALIDO
+    obtener_nombre_precio_primer_producto
 )
+from utils.config import USUARIO_VALIDO, PASSWORD_VALIDO
 
 
 def test_catalogo_inventario():
