@@ -1,6 +1,18 @@
-# ChromeDriver local
-chromedriver.exe
+# Entornos virtuales
+.venv/
+venv/
 
-# Python
+# Cachés de Python
 __pycache__/
 *.pyc
+
+# Caché de pytest
+.pytest_cache/
+
+# Reportes y capturas generadas
+reports/*.html
+reports/*.png
+
+# Configuración de editores
+.vscode/
+.idea/
