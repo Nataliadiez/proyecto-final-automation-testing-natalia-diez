@@ -7,6 +7,8 @@ disponible en todos los tests automáticamente, sin necesidad de importarlo.
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from pages.login_page import LoginPage
+from utils.config import USUARIO_VALIDO, PASSWORD_VALIDO
 
 
 def pytest_addoption(parser):
@@ -38,3 +40,14 @@ def driver(request):
     navegador = webdriver.Chrome(options=opciones)
     yield navegador
     navegador.quit()
+
+@pytest.fixture
+def sesion_iniciada(driver):
+    """Devuelve un driver ya logueado en el inventario de SauceDemo.
+
+    Evita repetir el login en cada test de catálogo, carrito y checkout.
+    """
+    login = LoginPage(driver)
+    login.abrir()
+    login.iniciar_sesion(USUARIO_VALIDO, PASSWORD_VALIDO)
+    return driver
