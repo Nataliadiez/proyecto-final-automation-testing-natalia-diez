@@ -1,39 +1,13 @@
-"""
-Automatización de Login:
-Navegar a la página de login de saucedemo.com
-Ingresar credenciales válidas (usuario: "standard_user", contraseña: "secret_sauce")
-Validar login exitoso verificando que se haya redirigido a la página de inventario
+"""Casos de prueba de login."""
 
-Criterios mínimos:
-Login automatizado con espera explícita y validación de /inventory.html y “Products/Swag Labs”. 
-"""
-
-from utils.driver import setup_driver
-from utils.login import login_saucedemo, validar_login_exitoso
-from utils.config import USUARIO_VALIDO, PASSWORD_VALIDO
+from pages.login_page import LoginPage
+from utils.config import USUARIO_VALIDO, PASSWORD_VALIDO, INVENTORY_URL
 
 
-def test_login_exitoso():
-    """Prueba el inicio de sesión exitoso en SauceDemo."""
+def test_login_exitoso(driver):
+    """Verifica que un usuario válido es redirigido al inventario."""
+    login = LoginPage(driver)
+    login.abrir()
+    login.iniciar_sesion(USUARIO_VALIDO, PASSWORD_VALIDO)
 
-    # Inicializar el driver
-    driver = setup_driver()
-
-    try:
-        # Ejecutar login con credenciales válidas
-        login_saucedemo(
-            driver,
-            USUARIO_VALIDO,
-            PASSWORD_VALIDO
-        )
-
-        # Validar que el login fue exitoso
-        titulo = validar_login_exitoso(driver)
-
-        print("Login exitoso")
-        print("Título de sección OK: ", titulo)
-
-    finally:
-        # Cerrar el navegador al finalizar la prueba
-        print("Cerrando el navegador.")
-        driver.quit()
+    assert INVENTORY_URL in login.url_actual(), "No se redirigió al inventario."
