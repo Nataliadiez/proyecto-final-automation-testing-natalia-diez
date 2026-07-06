@@ -1,0 +1,28 @@
+{
+  "credenciales_invalidas": [
+    {
+      "descripcion": "usuario y password inexistentes",
+      "usuario": "usuario_inexistente",
+      "password": "clave_incorrecta",
+      "error_esperado": "Epic sadface: Username and password do not match any user in this service"
+    },
+    {
+      "descripcion": "usuario valido con password incorrecta",
+      "usuario": "standard_user",
+      "password": "password_malo",
+      "error_esperado": "Epic sadface: Username and password do not match any user in this service"
+    },
+    {
+      "descripcion": "campo usuario vacio",
+      "usuario": "",
+      "password": "secret_sauce",
+      "error_esperado": "Epic sadface: Username is required"
+    },
+    {
+      "descripcion": "usuario bloqueado",
+      "usuario": "locked_out_user",
+      "password": "secret_sauce",
+      "error_esperado": "Epic sadface: Sorry, this user has been locked out."
+    }
+  ]
+}
