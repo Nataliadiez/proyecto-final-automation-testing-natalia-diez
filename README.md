@@ -1,166 +1,131 @@
-# Pre-entrega Automation Testing - SauceDemo
+# Proyecto Final — Automation Testing
 
-## Descripción del proyecto
+Framework de automatización de pruebas desarrollado como Trabajo Final Integrador
+del curso **Automation Testing** de Talento Tech (Gobierno de la Ciudad de Buenos Aires).
 
-Este proyecto corresponde a la pre-entrega del curso de Automation Testing de Talento Tech.
+Combina **pruebas de UI** (Selenium WebDriver sobre SauceDemo) y **pruebas de API**
+(requests sobre JSONPlaceholder), aplicando el patrón **Page Object Model** y
+generando reportes HTML.
 
-El objetivo es automatizar flujos básicos de navegación e interacción web utilizando Selenium WebDriver, Python y Pytest sobre el sitio demo:
+## Tecnologías
 
-https://www.saucedemo.com/
-
-Las pruebas automatizadas verifican el login, la visualización del catálogo de productos y la interacción con el carrito de compras.
-
-## Tecnologías utilizadas
-
-- Python
-- Selenium WebDriver
-- Pytest
-- Pytest HTML
-- Google Chrome
-- Git y GitHub
-
-## Casos de prueba incluidos
-
-### 1. Automatización de Login
-
-Se valida que un usuario pueda iniciar sesión correctamente con credenciales válidas.
-
-Validaciones realizadas:
-
-- Navegación a la página de login.
-- Ingreso de usuario y contraseña válidos.
-- Redirección a `/inventory.html`.
-- Validación del título del navegador `Swag Labs`.
-- Validación del título visible `Products`.
-
-### 2. Navegación y Verificación del Catálogo
-
-Se valida que la página de inventario cargue correctamente luego del login.
-
-Validaciones realizadas:
-
-- Título correcto de la página de inventario.
-- Presencia de productos visibles.
-- Presencia de elementos principales de la interfaz, como menú, filtro y carrito.
-- Obtención del nombre y precio del primer producto listado.
-
-### 3. Interacción con Productos y Carrito
-
-Se valida la interacción básica con el carrito de compras.
-
-Validaciones realizadas:
-
-- Agregado del primer producto al carrito.
-- Verificación del contador del carrito.
-- Navegación a la página del carrito.
-- Confirmación de que el producto agregado aparece correctamente en el carrito.
+- **Python** como lenguaje principal
+- **Pytest** como framework de testing
+- **Selenium WebDriver** para las pruebas de interfaz
+- **Requests** para las pruebas de API
+- **pytest-html** para los reportes
+- **Git / GitHub** para el control de versiones
 
 ## Estructura del proyecto
 
-```text
-pre-entrega/
+```
+proyecto-final/
 │
-├── tests/
-│   ├── test_login.py
-│   ├── test_catalogo.py
-│   └── test_productos.py
+├── pages/                  # Page Objects (patrón POM)
+│   ├── base_page.py        # Comportamiento común: esperas, clicks, escritura
+│   ├── login_page.py       # Página de login
+│   ├── inventory_page.py   # Catálogo de productos
+│   ├── cart_page.py        # Carrito
+│   └── checkout_page.py    # Flujo de compra
+│
+├── tests/                  # Casos de prueba
+│   ├── test_login.py       # Login exitoso + negativos (parametrizados)
+│   ├── test_inventory.py   # Navegación y catálogo
+│   ├── test_cart.py        # Agregar producto al carrito
+│   ├── test_checkout.py    # Flujo completo de compra
+│   └── test_api.py         # API pública (GET / POST / DELETE)
 │
 ├── utils/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── driver.py
-│   ├── login.py
-│   ├── catalogo.py
-│   └── carrito.py
+│   └── config.py           # URLs y credenciales centralizadas
 │
-├── reports/
-│   ├── report.html
-│   └── report.png
+├── data/
+│   └── usuarios.json        # Datos externos para parametrizar el login
 │
-├── README.md
-└── .gitignore
+├── reports/                # Reportes HTML y capturas de fallos
+│
+├── conftest.py             # Fixtures (driver, sesión) y captura en fallos
+├── pytest.ini              # Configuración de pytest y reportes
+├── requirements.txt
+└── README.md
 ```
 
-## Instalación del proyecto
+## Instalación
 
-1. Clonar el repositorio:
+Se recomienda usar un entorno virtual:
 
 ```bash
-git clone https://github.com/Nataliadiez/pre-entrega-automation-testing-natalia-diez
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# Linux / Mac
+source .venv/bin/activate
+
+pip install -r requirements.txt
 ```
 
-2. Ingresar a la carpeta del proyecto:
+> **Nota:** desde Selenium 4.6, no hace falta descargar `chromedriver` manualmente.
+> Selenium Manager detecta y gestiona el driver automáticamente. Solo se necesita
+> tener **Google Chrome** instalado.
+
+## Ejecución
+
+Correr toda la suite (UI + API), con reporte HTML:
 
 ```bash
-cd pre-entrega-automation-testing-natalia-diez
+pytest
 ```
 
-3. Instalar las dependencias necesarias:
+Correr un archivo puntual:
 
 ```bash
-python -m pip install selenium pytest pytest-html
+pytest tests/test_login.py
 ```
 
-## Ejecución de las pruebas
-
-Para ejecutar todos los tests:
+Correr sin abrir la ventana del navegador (modo headless):
 
 ```bash
-python -m pytest -v
+pytest --headless
 ```
 
-Para ejecutar un test específico:
+## Reportes
 
-```bash
-python -m pytest tests/test_login.py -v
+Al finalizar, se genera un reporte HTML en:
+
 ```
-
-```bash
-python -m pytest tests/test_catalogo.py -v
-```
-
-```bash
-python -m pytest tests/test_productos.py -v
-```
-
-## Generación del reporte HTML
-
-Para ejecutar todas las pruebas y generar el reporte HTML:
-
-```bash
-python -m pytest -v --html=reports/report.html --self-contained-html
-```
-
-El reporte se genera en la siguiente ruta:
-
-```text
 reports/report.html
 ```
 
-Para abrir el reporte en Windows desde la terminal:
+El reporte muestra cada test, su estado (pasado/fallado) y su duración.
+Cuando un test de UI **falla**, se guarda automáticamente una captura de pantalla
+en `reports/` con el formato `FALLO_<nombre_del_test>_<fecha_hora>.png`, y se
+adjunta al reporte HTML para facilitar el diagnóstico.
 
-```bash
-start reports/report.html
-```
+## Casos de prueba
 
-## Captura del reporte HTML
+### UI (Selenium) — 8 ejecuciones
 
-Captura del reporte generado:
+| Caso | Tipo | Descripción |
+|------|------|-------------|
+| `test_login_exitoso` | Positivo | Login con credenciales válidas → redirige al inventario |
+| `test_login_invalido` | Negativo (x4) | Credenciales inválidas, vacías y usuario bloqueado → muestra el error esperado |
+| `test_catalogo` | Positivo | Verifica título, presencia de productos y elementos de la interfaz |
+| `test_agregar_producto_al_carrito` | Positivo | Agrega un producto y valida el contador y su presencia en el carrito |
+| `test_checkout_completo` | Positivo | Flujo end-to-end: agregar producto, comprar y confirmar |
 
-```md
-![Reporte HTML](reports/report.png)
-```
+Los casos negativos se leen desde `data/usuarios.json` (fuente externa) y se ejecutan
+mediante **parametrización**: cada set de datos corre como un test independiente.
 
-## Resultado esperado
+### API (requests) — 4 casos
 
-Al ejecutar la suite completa, se espera que los tres casos de prueba finalicen correctamente:
+| Caso | Método | Validación |
+|------|--------|------------|
+| `test_get_post_existente` | GET | Código 200 y estructura del JSON |
+| `test_post_crear_recurso` | POST | Código 201 y recurso creado |
+| `test_delete_recurso` | DELETE | Código 200 |
+| `test_flujo_crear_y_usar_id` | POST | Encadenamiento: crear un recurso y reutilizar su id |
 
-```text
-tests/test_catalogo.py::test_catalogo_inventario PASSED
-tests/test_login.py::test_login_exitoso PASSED
-tests/test_productos.py::test_agregar_producto_al_carrito PASSED
-```
+## Sitio y API bajo prueba
 
-## Autoría
+- **UI:** [SauceDemo](https://www.saucedemo.com) — aplicación demo para prácticas de automatización.
+- **API:** [JSONPlaceholder](https://jsonplaceholder.typicode.com) — API pública de prueba.
 
-Proyecto realizado como parte de la pre-entrega del curso de Automation Testing de Talento Tech.
